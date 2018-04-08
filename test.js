@@ -11,7 +11,7 @@ var params = {
 
 var toBeHandled = [];
 
-//pass string of msg to be eval
+//pass string of msg to be eval **DO NOT CALL DIRECTLY**
 function evalMsg(msg){
   params.Text = msg;
   comprehend.detectSentiment(params, function(err, data) {
@@ -30,9 +30,12 @@ function evalMsg(msg){
 }
 
 var handleSentiment = (obj) => {
+  //handle consequences to user
+  //obj = {msg:msg,user:{},sentiment:"SENTIMENT"}
   console.log(obj);
 }
 
+//make request to analyze msg
 var analyzeMsg = (msg, user) => {
   toBeHandled.push({msg:msg,user:user,sentiment:null});
   evalMsg(msg);
