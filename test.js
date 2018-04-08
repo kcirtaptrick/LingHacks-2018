@@ -9,26 +9,33 @@ var params = {
   LanguageCode: 'en'
 };
 
-//pass string of msg to be evaled
+var toBeHandled = [];
+
+//pass string of msg to be eval
 function evalMsg(msg){
   params.Text = msg;
   comprehend.detectSentiment(params, function(err, data) {
-    if (err) console.log(err, err.stack); // an error occurred
+    if (err) console.log(err, err.stack);// an error occurred
     else     console.log(data);           // successful response
-    switch(data.Sentiment){
-      case NEGATIVE:
-        console.log("you get a warning");
+
+    for (msg of toBeHandled) {
+      if(msg.sentiment == null){
+        msg.sentiment = data.Sentiment;
+        handleSentiment(toBeHandled.pop());
         break;
-      case POSITIVE:
-        break;
-      case MIXED:
-        break;
-      case NEUTRAL:
-        break;
-      default:
-        break;
+      }
     }
+
   });
 }
 
-evalMsg("every thing is the worst");
+var handleSentiment = (obj) => {
+  console.log(obj);
+}
+
+var analyzeMsg = (msg, user) => {
+  toBeHandled.push({msg:msg,user:user,sentiment:null});
+  evalMsg(msg);
+}
+
+analyzeMsg("fuck off you little bitch McBitchFace",{name:"a name",info:"info"});
